@@ -14,15 +14,15 @@ dependencies = [
     "pydantic>=2.0",       # 数据校验与序列化（含 JSON 模型等）
     "python-dotenv>=1.0",  # .env 文件解析
     "anthropic>=0.25",     # Anthropic LLM SDK（流式 + prompt caching）
-    "textual>=0.75",       # 终端 UI 框架（kama-tui）
+    "textual>=0.75",       # 终端 UI 框架（cca-tui）
     "httpx[socks]>=0.28.1",
 ]
 
-# 安装后可在 PATH 中执行的入口：`kama` / `kama-core` / `kama-tui`
+# 安装后可在 PATH 中执行的入口：`cca` / `cca-core` / `cca-tui`
 [project.scripts]
-kama = "claude_code_agent.cli.main:main"
-kama-core = "claude_code_agent.core.app:run"
-kama-tui = "claude_code_agent.tui.__main__:main"
+cca = "claude_code_agent.cli.main:main"
+cca-core = "claude_code_agent.core.app:run"
+cca-tui = "claude_code_agent.tui.__main__:main"
 
 # ---- Hatch：打 wheel 时从 src 布局收录包 ----
 [tool.hatch.build.targets.wheel]

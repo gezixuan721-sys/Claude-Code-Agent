@@ -18,7 +18,7 @@ from textual.message import Message
 from textual.widget import Widget
 from textual.widgets import Label, Static, TextArea
 
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 from claude_code_agent.core.skills.loader import SkillLoader
 from claude_code_agent.core.transport.socket_client import IpcError, SocketClient
 
@@ -461,7 +461,7 @@ class ChatTextArea(TextArea):
         await super()._on_key(event)
 
 
-class KamaTuiApp(App[None]):
+class CcaTuiApp(App[None]):
     """Claude-Code-Agent TUI：终端滚屏风格，实时展示 agent 执行过程。"""
 
     TITLE = "Claude-Code-Agent"
@@ -1055,7 +1055,7 @@ class KamaTuiApp(App[None]):
             ))
 
 
-# TUI 入口：读取配置并启动 KamaTuiApp
-def run(config: KamaConfig, replay_run_id: str | None = None) -> None:
-    app = KamaTuiApp(config.host, config.port, replay_run_id=replay_run_id)
+# TUI 入口：读取配置并启动 CcaTuiApp
+def run(config: CcaConfig, replay_run_id: str | None = None) -> None:
+    app = CcaTuiApp(config.host, config.port, replay_run_id=replay_run_id)
     app.run()

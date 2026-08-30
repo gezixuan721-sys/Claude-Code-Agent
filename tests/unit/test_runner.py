@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 from claude_code_agent.core.events.bus import EventBus
 from claude_code_agent.core.llm.types import LlmResponse, ToolCallBlock
 from claude_code_agent.core.runner import AgentRunner
@@ -76,8 +76,8 @@ class _CapturingProvider:
 # --- helpers -----------------------------------------------------------------
 
 
-def _config(max_steps: int = 5) -> KamaConfig:
-    cfg = KamaConfig()
+def _config(max_steps: int = 5) -> CcaConfig:
+    cfg = CcaConfig()
     cfg.agent.max_steps = max_steps
     return cfg
 
@@ -86,7 +86,7 @@ async def _run(
     goal: str = "test goal",
     *,
     provider: object | None = None,
-    config: KamaConfig | None = None,
+    config: CcaConfig | None = None,
     tmp_path: Path,
 ) -> list[BaseModel]:
     collected: list[BaseModel] = []

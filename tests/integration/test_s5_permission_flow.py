@@ -11,7 +11,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 from claude_code_agent.core.events.bus import EventBus
 from claude_code_agent.core.llm.types import LlmResponse, ToolCallBlock
 from claude_code_agent.core.permissions.manager import PermissionManager
@@ -80,7 +80,7 @@ def _runner(
     tmp_path: Path,
     max_steps: int = 10,
 ) -> AgentRunner:
-    config = KamaConfig()
+    config = CcaConfig()
     config.agent.max_steps = max_steps
     return AgentRunner(
         config,

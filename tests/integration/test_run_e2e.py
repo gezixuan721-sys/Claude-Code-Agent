@@ -16,7 +16,7 @@ from pathlib import Path
 import pytest
 from dotenv import load_dotenv
 
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 from claude_code_agent.core.runner import AgentRunner
 
 # Load project .env so ANTHROPIC_API_KEY is available without going through get_config()
@@ -55,7 +55,7 @@ async def test_run_e2e_reads_file_and_succeeds(
     )
     runs_dir = tmp_path / "runs"
 
-    config = KamaConfig()
+    config = CcaConfig()
     config.agent.max_steps = 5
 
     runner = AgentRunner(config, runs_dir=runs_dir)

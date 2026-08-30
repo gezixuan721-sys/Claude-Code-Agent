@@ -8,7 +8,7 @@ from pathlib import Path
 
 from claude_code_agent.core.bus.events import RunFinishedEvent, RunStartedEvent
 from claude_code_agent.core.compact.compactor import Compactor
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 from claude_code_agent.core.context import ExecutionContext
 from claude_code_agent.core.events.bus import EventBus, EventHandler
 from claude_code_agent.core.events.writer import EventWriter
@@ -55,7 +55,7 @@ class AgentRunner:
     # 组装所有运行时依赖，准备执行一次完整的 agent run
     def __init__(
         self,
-        config: KamaConfig,
+        config: CcaConfig,
         *,
         bus: EventBus | None = None,
         provider: LLMProvider | None = None,
@@ -161,8 +161,8 @@ class AgentRunner:
             notes = ""
         run_path.mkdir(parents=True, exist_ok=True)
 
-        global_ctx = load_context_file(Path("~/.kama/context.md").expanduser())
-        project_ctx = load_context_file(Path(".kama/context.md"))
+        global_ctx = load_context_file(Path("~/.cca/context.md").expanduser())
+        project_ctx = load_context_file(Path(".cca/context.md"))
 
         task_manager = TaskManager(run_path / ".tasks")
 

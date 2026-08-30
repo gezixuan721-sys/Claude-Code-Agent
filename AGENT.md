@@ -27,26 +27,26 @@ uv run python scripts/gen_protocol_doc.py
 uv run python scripts/gen_protocol_doc.py --check
 
 # Run daemon manually
-uv run kama-core                        # foreground; Ctrl+C to stop
-KAMA_PORT=8000 uv run kama-core        # override port
+uv run cca-core                        # foreground; Ctrl+C to stop
+CCA_PORT=8000 uv run cca-core        # override port
 
 # Send a ping
-uv run kama ping
-uv run kama --version
+uv run cca ping
+uv run cca --version
 ```
 
 ## Architecture
 
-This is a **dual-process** local AI agent system. `kama-core` is a persistent daemon; `kama` and `kama-tui` are clients that connect to it over a Unix domain socket.
+This is a **dual-process** local AI agent system. `cca-core` is a persistent daemon; `cca` and `cca-tui` are clients that connect to it over a Unix domain socket.
 
 ```
-kama-core (daemon)
+cca-core (daemon)
   └─ listens on 127.0.0.1:7437 (TCP)
        ↑ JSON-RPC 2.0 NDJSON
-kama (CLI)   kama-tui (TUI, S2+)
+cca (CLI)   cca-tui (TUI, S2+)
 ```
 
-**`kama-tui` is the primary frontend.** All user-facing work on task management, observability, and interaction should be designed for and validated in the TUI first. The `kama` CLI exists only for quick scripted testing and debugging — it is not a product surface. When implementing features that touch the user interface, invest in the TUI layout, event rendering, and keyboard interactions. Do not shortcut TUI work by pointing to the CLI as an alternative.
+**`cca-tui` is the primary frontend.** All user-facing work on task management, observability, and interaction should be designed for and validated in the TUI first. The `cca` CLI exists only for quick scripted testing and debugging — it is not a product surface. When implementing features that touch the user interface, invest in the TUI layout, event rendering, and keyboard interactions. Do not shortcut TUI work by pointing to the CLI as an alternative.
 
 ### Protocol layer (`src/claude_code_agent/core/bus/`)
 
@@ -64,11 +64,11 @@ All IPC messages are typed pydantic v2 models with a **discriminated union on th
 
 ### Config (`src/claude_code_agent/core/config.py`)
 
-Four-tier priority: **built-in defaults → `~/.kama/config.toml` → `.env` → env vars**.
+Four-tier priority: **built-in defaults → `~/.cca/config.toml` → `.env` → env vars**.
 
 S0 keys: `host` (default `127.0.0.1`), `port` (default `7437`), `log_level`, `log_file`. Config file is silently skipped if absent; unknown keys cause a hard exit.
 
-Relevant env vars: `KAMA_CONFIG`, `KAMA_HOST`, `KAMA_PORT`, `KAMA_LOG_LEVEL`, `KAMA_LOG_FILE`, `KAMA_LOG_FORMAT`.
+Relevant env vars: `CCA_CONFIG`, `CCA_HOST`, `CCA_PORT`, `CCA_LOG_LEVEL`, `CCA_LOG_FILE`, `CCA_LOG_FORMAT`.
 
 ### Daemon entry (`src/claude_code_agent/core/app.py`)
 
@@ -76,7 +76,7 @@ Relevant env vars: `KAMA_CONFIG`, `KAMA_HOST`, `KAMA_PORT`, `KAMA_LOG_LEVEL`, `K
 
 ### Testing
 
-Integration tests in `tests/conftest.py` spawn a real daemon subprocess using a random free port (via `free_port` fixture). The fixture finds a free port, releases it, passes it to the daemon via `KAMA_PORT`, then polls `asyncio.open_connection` until the daemon is ready.
+Integration tests in `tests/conftest.py` spawn a real daemon subprocess using a random free port (via `free_port` fixture). The fixture finds a free port, releases it, passes it to the daemon via `CCA_PORT`, then polls `asyncio.open_connection` until the daemon is ready.
 
 ### Code style
 

@@ -22,9 +22,9 @@ def free_port() -> int:
 @pytest.fixture
 async def running_daemon(free_port: int) -> AsyncGenerator[subprocess.Popen[bytes], None]:
     env = os.environ.copy()
-    env["KAMA_PORT"] = str(free_port)
-    env["KAMA_LOG_FILE"] = ""
-    env["KAMA_LOG_LEVEL"] = "WARNING"
+    env["CCA_PORT"] = str(free_port)
+    env["CCA_LOG_FILE"] = ""
+    env["CCA_LOG_LEVEL"] = "WARNING"
 
     proc = subprocess.Popen([sys.executable, "-m", "claude_code_agent.core"], env=env)
 

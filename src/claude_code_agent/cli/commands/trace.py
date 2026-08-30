@@ -5,7 +5,7 @@ import sys
 import time
 from pathlib import Path
 
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 from claude_code_agent.core.trace.record import TraceRecord
 
 _COLORS = {
@@ -19,10 +19,10 @@ _RESET = "\033[0m"
 _BOLD = "\033[1m"
 
 
-# kama trace 子命令：从 daemon.jsonl 读取并展示 trace 记录
+# cca trace 子命令：从 daemon.jsonl 读取并展示 trace 记录
 def cmd_trace(
     run_id: str | None,
-    config: KamaConfig,
+    config: CcaConfig,
     *,
     layer: str | None = None,
     direction: str | None = None,

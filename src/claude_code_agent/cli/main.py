@@ -15,7 +15,7 @@ from claude_code_agent.core.logging_setup import setup_logging
 
 # CLI 主入口：解析命令行参数并分发到对应子命令
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="kama", description="Claude-Code-Agent CLI")
+    parser = argparse.ArgumentParser(prog="cca", description="Claude-Code-Agent CLI")
     parser.add_argument("--version", action="store_true", help="Print version and exit")
     subparsers = parser.add_subparsers(dest="command")
 

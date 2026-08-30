@@ -7,13 +7,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 
-_PID_FILE = Path.home() / ".kama" / "kama-core.pid"
+_PID_FILE = Path.home() / ".cca" / "cca-core.pid"
 
 
 # 尝试连接 daemon，成功则正常返回，失败则抛出 ConnectionRefusedError/OSError
-async def _ping_check(config: KamaConfig) -> None:
+async def _ping_check(config: CcaConfig) -> None:
     _r, w = await asyncio.open_connection(config.host, config.port)
     w.close()
     await w.wait_closed()
@@ -33,7 +33,7 @@ def _running_pid() -> int | None:
 
 
 # 打印 daemon 当前状态（running / not running）
-def cmd_core_status(config: KamaConfig) -> None:
+def cmd_core_status(config: CcaConfig) -> None:
     try:
         asyncio.run(_ping_check(config))
         print(f"running  ({config.host}:{config.port})")
@@ -42,7 +42,7 @@ def cmd_core_status(config: KamaConfig) -> None:
 
 
 # 在后台启动 daemon，若已在运行则提示并退出
-def cmd_core_start(config: KamaConfig) -> None:
+def cmd_core_start(config: CcaConfig) -> None:
     try:
         asyncio.run(_ping_check(config))
         print(f"already running  ({config.host}:{config.port})")
@@ -62,7 +62,7 @@ def cmd_core_start(config: KamaConfig) -> None:
 
 
 # 向 daemon 发送 SIGTERM 停止进程，若未运行则提示
-def cmd_core_stop(config: KamaConfig) -> None:
+def cmd_core_stop(config: CcaConfig) -> None:
     pid = _running_pid()
     if pid is None:
         print("not running")

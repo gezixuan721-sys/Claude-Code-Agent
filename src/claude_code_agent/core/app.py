@@ -34,7 +34,7 @@ from claude_code_agent.core.bus.commands import (
     SessionSendMessageResult,
 )
 from claude_code_agent.core.bus.envelope import EventPushEnvelope
-from claude_code_agent.core.config import KamaConfig, get_config
+from claude_code_agent.core.config import CcaConfig, get_config
 from claude_code_agent.core.events.bus import EventBus
 from claude_code_agent.core.llm.provider import AnthropicProvider
 from claude_code_agent.core.logging_setup import setup_logging
@@ -62,7 +62,7 @@ class CoreApp:
         self._bus = EventBus()
         self._broadcaster: IpcEventBroadcaster | None = None
         self._trace: TraceWriter | None = None
-        self._config: KamaConfig | None = None
+        self._config: CcaConfig | None = None
         self._running_runs: set[asyncio.Task[Any]] = set()
         self._sessions: SessionManager | None = None
         self._permission_manager: PermissionManager | None = None
@@ -178,7 +178,7 @@ class CoreApp:
     ) -> int:
         path = events_file(run_id)
         if not path.exists():
-            for candidate in Path("~/.kama/sessions").expanduser().glob(
+            for candidate in Path("~/.cca/sessions").expanduser().glob(
                 f"*/runs/{run_id}/events.jsonl"
             ):
                 path = candidate
@@ -217,7 +217,7 @@ class CoreApp:
             await self._trace.start()
             self._bus.subscribe(self._trace_event_handler)
 
-        policy_file = Path("~/.kama/policy.toml").expanduser()
+        policy_file = Path("~/.cca/policy.toml").expanduser()
         self._permission_manager = PermissionManager(
             policy_file=policy_file,
             timeout_s=self._config.permission.timeout_s,
@@ -230,7 +230,7 @@ class CoreApp:
 
         self._broadcaster = IpcEventBroadcaster(trace=self._trace)
         self._bus.subscribe(self._broadcaster.handle)
-        sessions_root = Path("~/.kama/sessions").expanduser()
+        sessions_root = Path("~/.cca/sessions").expanduser()
         store = SessionStore(sessions_root)
         assert self._config is not None
         compact_provider = AnthropicProvider(self._config.llm.default_model)
@@ -270,7 +270,7 @@ class CoreApp:
         server.register("session.compact", self._session_compact_handler)
 
         addr = await server.start()
-        logger.info("kama-core %s listening addr=%s", claude_code_agent.__version__, addr)
+        logger.info("cca-core %s listening addr=%s", claude_code_agent.__version__, addr)
         logger.info("config: %s", self._config)
 
         loop = asyncio.get_running_loop()

@@ -6,7 +6,7 @@ import sys
 import time
 from typing import Any
 
-from claude_code_agent.core.config import KamaConfig
+from claude_code_agent.core.config import CcaConfig
 from claude_code_agent.core.transport.socket_client import IpcError, SocketClient
 
 
@@ -63,7 +63,7 @@ class StdoutPrinter:
 
 
 # 异步核心：连接 daemon，订阅事件，触发 run，等待 run.finished
-async def _run_async(goal: str, config: KamaConfig) -> int:
+async def _run_async(goal: str, config: CcaConfig) -> int:
     client = SocketClient(config.host, config.port)
     try:
         await client.connect()
@@ -113,8 +113,8 @@ async def _run_async(goal: str, config: KamaConfig) -> int:
     return exit_code
 
 
-# 执行 kama run --goal "..." 命令
-def cmd_run(goal: str, config: KamaConfig) -> None:
+# 执行 cca run --goal "..." 命令
+def cmd_run(goal: str, config: CcaConfig) -> None:
     try:
         exit_code = asyncio.run(_run_async(goal, config))
     except KeyboardInterrupt:

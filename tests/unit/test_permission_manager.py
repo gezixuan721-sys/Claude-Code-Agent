@@ -13,7 +13,7 @@ from claude_code_agent.core.permissions.storage import load_policy_file
 # ── helpers ──────────────────────────────────────────────────────────────────
 
 def _make_manager(**policies: ToolPolicy) -> PermissionManager:
-    # policy_file=None：测试中不使用持久化，不污染 ~/.kama/policy.toml
+    # policy_file=None：测试中不使用持久化，不污染 ~/.cca/policy.toml
     return PermissionManager(policies or None)
 
 
